@@ -1,8 +1,8 @@
 PRODUCT_MAKEFILES := \
-	$(LOCAL_DIR)/qcom_sofia.mk \
+	$(LOCAL_DIR)/lineage_sofia.mk \
 
 COMMON_LUNCH_CHOICES := \
-	qcom_sofia-user \
-	qcom_sofia-userdebug \
-        qcom_sofia-eng
+	lineage_sofia-user \
+	lineage_sofia-userdebug \
+        lineage_sofia-eng
 
