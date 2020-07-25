@@ -11,8 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#TODO add this file.
-$(call inherit-product, device/xiaomi/laurel_sprout/device.mk)
+
+#Inherit from sofia device
+$(call inherit-product, device/motorola/sofia/device.mk)
 
 # Inherit from the common Open Source product configuration
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
@@ -32,11 +33,11 @@ PRODUCT_DEVICE := sofia
 PRODUCT_BRAND := Moto G Power
 PRODUCT_MANUFACTURER := Motorola
 PRODUCT_SHIPPING_API_LEVEL := 28
-#TODO Update fingerprint.
+
 BUILD_FINGERPRINT := "motorola/sofia_retail/sofia:10/QPM30.80-13-2/0f2407:user/release-keys"
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRIVATE_BUILD_DESC="qssi-user 10 QKQ1.190910.002 V11.0.16.0.QFQMIXM release-keys" \
+    PRIVATE_BUILD_DESC="sofia_retail-user 10 QPM30.80-13-2 0f2407 release-keys" \
     PRODUCT_NAME="laurel_sprout" \
     TARGET_DEVICE="laurel_sprout"
 #TODO What is this?
