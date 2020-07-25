@@ -15,9 +15,11 @@
 # limitations under the License.
 #
 
+#TODO adding vendor files.
 # Get non-open-source specific aspects
-$(call inherit-product-if-exists, vendor/xiaomi/laurel_sprout/laurel_sprout-vendor.mk)
+#$(call inherit-product-if-exists, vendor/xiaomi/laurel_sprout/laurel_sprout-vendor.mk)
 
+#TODO
 # Enable updating of APEXes
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 
@@ -71,8 +73,8 @@ PRODUCT_PACKAGES += \
     otapreopt_script
 
 # Boot animation
-TARGET_SCREEN_HEIGHT := 1560
-TARGET_SCREEN_WIDTH := 720
+TARGET_SCREEN_HEIGHT := 2300
+TARGET_SCREEN_WIDTH := 1080
 
 # Some GSI builds enable dexpreopt, whitelist these preopt files
 PRODUCT_ARTIFACT_PATH_REQUIREMENT_WHITELIST += %.odex %.vdex %.art
@@ -89,9 +91,9 @@ PRODUCT_ARTIFACT_PATH_REQUIREMENT_WHITELIST += \
 # GSI specific tasks on boot
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/skip_mount.cfg:system/etc/init/config/skip_mount.cfg
-
+#TODO add overlay folder
 # Overlays
-DEVICE_PACKAGE_OVERLAYS += \
+#DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
     $(LOCAL_PATH)/overlay-lineage
 
