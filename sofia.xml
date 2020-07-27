@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+
+  <remote  name="github" 
+           fetch="https://github.com/"
+           revision="LineageOS 17.1" />
+
+  <project name=" h0pk1do/device_sofia" path="device/motorola/sofia" remote="github" />
+  <project name="h0pk1do/device_sofia" path="kernel/motorola/sofia" remote="github" />
+
+</manifest>
