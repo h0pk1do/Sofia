@@ -38,9 +38,9 @@ BUILD_FINGERPRINT := "motorola/sofia_retail/sofia:10/QPM30.80-13-2/0f2407:user/r
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     PRIVATE_BUILD_DESC="sofia_retail-user 10 QPM30.80-13-2 0f2407 release-keys" \
-    PRODUCT_NAME="laurel_sprout" \
-    TARGET_DEVICE="laurel_sprout"
+    PRODUCT_NAME="sofia" \
+    TARGET_DEVICE="sofia"
 #TODO What is this?
-PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
+PRODUCT_GMS_CLIENTID_BASE := android-motorola
 
 ALLOW_MISSING_DEPENDENCIES := true

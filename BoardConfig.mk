@@ -176,11 +176,11 @@ BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --set_hashtree_disabled_flag
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 2
 
 # Vendor init
-TARGET_INIT_VENDOR_LIB := //$(DEVICE_PATH):libinit_laurel_sprout
-TARGET_RECOVERY_DEVICE_MODULES := libinit_laurel_sprout
+TARGET_INIT_VENDOR_LIB := //$(DEVICE_PATH):libinit_sofia
+TARGET_RECOVERY_DEVICE_MODULES := libinit_sofia
 
 # Inherit from the proprietary version
 -include vendor/motorola/sofia/BoardConfigVendor.mk
 
 # Include prebuilt vendor
-include device/xiaomi/laurel_sprout-images/vendor-image.mk
+include device/motorola/sofia/sofia-vendor.mk

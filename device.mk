@@ -14,12 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+#Edited by h0pk1do
 
-#TODO adding vendor files.
+
 # Get non-open-source specific aspects
-#$(call inherit-product-if-exists, vendor/xiaomi/laurel_sprout/laurel_sprout-vendor.mk)
+#$(call inherit-product-if-exists, vendor/motorola/sofia/sofia-vendor.mk)
 
-#TODO
+
 # Enable updating of APEXes
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 
@@ -91,7 +92,7 @@ PRODUCT_ARTIFACT_PATH_REQUIREMENT_WHITELIST += \
 # GSI specific tasks on boot
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/skip_mount.cfg:system/etc/init/config/skip_mount.cfg
-#TODO add overlay folder
+
 # Overlays
 #DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
@@ -204,14 +205,14 @@ PRODUCT_PACKAGES += \
 
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power@1.3-service.laurel_sprout-libperfmgr
+    android.hardware.power@1.3-service.sofia-libperfmgr
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/perf/powerhint.json:system/etc/powerhint.json
 
 # Soong
 PRODUCT_SOONG_NAMESPACES += \
-    device/xiaomi/laurel_sprout
+    device/motorola/sofia
 
 # Telephony
 PRODUCT_PACKAGES += \
