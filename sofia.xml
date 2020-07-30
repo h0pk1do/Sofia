@@ -3,7 +3,7 @@
 
   <remote  name="github" 
            fetch="https://github.com/"
-           revision="LineageOS 17.1" />
+           revision="master" />
 
   <project name="h0pk1do/device_Sofia" path="device/motorola/sofia" remote="github" />
   <project name="h0pk1do/android_kernel_sofia" path="kernel/motorola/sofia" remote="github" />
