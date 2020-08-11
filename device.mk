@@ -20,49 +20,25 @@
 # Get non-open-source specific aspects
 #$(call inherit-product-if-exists, vendor/motorola/sofia/sofia-vendor.mk)
 
+PRODUCT_PACKAGES += com.android.apex.cts.shim.v1_prebuilt
+TARGET_FLATTEN_APEX := false
 
-# Enable updating of APEXes
-$(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
-
-# Dalvik heap configuration for a 4GB phone
-$(call inherit-product, frameworks/native/build/phone-xhdpi-4096-dalvik-heap.mk)
-
-PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
-
-# VNDK
-PRODUCT_TARGET_VNDK_VERSION := 29
-
-# Permissions
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
-    $(LOCAL_PATH)/permissions/android.hardware.fingerprint.xml:system/etc/permissions/android.hardware.fingerprint.xml
-
-# A/B
-AB_OTA_UPDATER := true
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+    ro.build.version.all_codenames=$(PLATFORM_VERSION_ALL_CODENAMES) \
+    ro.build.version.codename=$(PLATFORM_VERSION_CODENAME) \
+    ro.build.version.release=$(PLATFORM_VERSION) \
+    ro.build.version.sdk=$(PLATFORM_SDK_VERSION)
 
 AB_OTA_PARTITIONS += \
     boot \
+    dtbo \
     system \
     vbmeta \
-    vendor \
-    dtbo \
-    modem \
-    abl \
-    bluetooth \
-    cmnlib \
-    cmnlib64 \
-    devcfg \
-    dsp \
-    hyp \
-    imagefv \
-    keymaster \
-    qupfw \
-    rpm \
-    storsec \
-    tz \
-    uefisecapp \
-    xbl \
-    xbl_config
+    product
+
+# Permissions
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
 
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
@@ -70,175 +46,156 @@ AB_OTA_POSTINSTALL_CONFIG += \
     FILESYSTEM_TYPE_system=ext4 \
     POSTINSTALL_OPTIONAL_system=true
 
+AB_OTA_POSTINSTALL_CONFIG += \
+    RUN_POSTINSTALL_system=true \
+    POSTINSTALL_PATH_system=system/bin/copy_ab_partitions \
+    FILESYSTEM_TYPE_system=ext4 \
+    POSTINSTALL_OPTIONAL_system=true
+
 PRODUCT_PACKAGES += \
-    otapreopt_script
+    otapreopt_script \
+    update_engine \
+    update_engine_sideload \
+    update_verifier \
+    copy_ab_partitions
 
-# Boot animation
-TARGET_SCREEN_HEIGHT := 2300
-TARGET_SCREEN_WIDTH := 1080
-
-# Some GSI builds enable dexpreopt, whitelist these preopt files
-PRODUCT_ARTIFACT_PATH_REQUIREMENT_WHITELIST += %.odex %.vdex %.art
-
-# Exclude GSI specific files
-PRODUCT_ARTIFACT_PATH_REQUIREMENT_WHITELIST += \
-    system/etc/init/config/skip_mount.cfg
-
-# Exclude all files under system/product and system/product_services
-PRODUCT_ARTIFACT_PATH_REQUIREMENT_WHITELIST += \
-    system/product/% \
-    system/product_services/%
-
-# GSI specific tasks on boot
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/skip_mount.cfg:system/etc/init/config/skip_mount.cfg
-
-# Overlays
-#DEVICE_PACKAGE_OVERLAYS += \
-    $(LOCAL_PATH)/overlay \
-    $(LOCAL_PATH)/overlay-lineage
-
-# Properties
--include $(LOCAL_PATH)/system_prop.mk
-
-# Device uses high-density artwork where available
-PRODUCT_AAPT_CONFIG := normal
-PRODUCT_AAPT_PREF_CONFIG := xxhdpi
-
-# ANT+
-PRODUCT_PACKAGES += \
-    AntHalService
-
-# Audio
-PRODUCT_PACKAGES += \
-    audio.a2dp.default \
-    libaacwrapper
-
-PRODUCT_COPY_FILES += \
-    frameworks/av/services/audiopolicy/config/a2dp_audio_policy_configuration.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/a2dp_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/a2dp_in_audio_policy_configuration.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/a2dp_in_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/usb_audio_policy_configuration.xml \
-    frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/bluetooth_audio_policy_configuration.xml \
-    $(LOCAL_PATH)/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/audio/audio_policy_configuration.xml \
-    $(LOCAL_PATH)/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/audio_policy_configuration.xml
-
-# ANT+
-PRODUCT_PACKAGES += \
-    AntHalService
+PRODUCT_HOST_PACKAGES += \
+    brillo_update_payload
 
 # Boot control
 PRODUCT_PACKAGES_DEBUG += \
-    android.hardware.boot@1.0-impl.recovery \
     bootctl
 
-# Camera
+# Boot control
 PRODUCT_PACKAGES += \
-    Snap
-
-# Device-specific settings
-PRODUCT_PACKAGES += \
-    XiaomiParts
-
-# Display
-PRODUCT_PACKAGES += \
-    libdisplayconfig \
-    libqdMetaData \
-    libqdMetaData.system \
-    libvulkan
-
-# FM
-PRODUCT_PACKAGES += \
-    libqcomfm_jni \
-    qcom.fmradio
-
-# Fingerprint
-PRODUCT_PACKAGES += \
-    lineage.biometrics.fingerprint.inscreen@1.0-service.xiaomi_trinket
-
-PRODUCT_COPY_FILES += \
-    vendor/lineage/config/permissions/vendor.lineage.biometrics.fingerprint.inscreen.xml:system/etc/permissions/vendor.lineage.biometrics.fingerprint.inscreen.xml
-
-# HIDL
-PRODUCT_PACKAGES += \
-    android.hidl.base@1.0 \
-    android.hidl.manager@1.0
-
-# Init
-PRODUCT_PACKAGES += \
-    init.qcom.rc \
-    fs_none \
-    init.recovery.qcom.rc \
-    ueventd.qcom.rc \
-    init.qcom.usb.sh
-
-# IMS
-PRODUCT_PACKAGES += \
-    ims-ext-common \
-    ims_ext_common.xml
-
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.telephony.ims.xml:system/etc/permissions/android.hardware.telephony.ims.xml
-
-# Keylayouts
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl
-
-# Lights
-PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-service.xiaomi_trinket
-
-# Media
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/media_profiles_vendor.xml:system/etc/media_profiles_vendor.xml
-
-# Net
-PRODUCT_PACKAGES += \
-    netutils-wrapper-1.0
-
-# Offline charger resource
-PRODUCT_PACKAGES += \
-    charger_res_images
-
-# OTA
-PRODUCT_PACKAGES += \
-    Updater
-
-# Power
-PRODUCT_PACKAGES += \
-    android.hardware.power@1.3-service.sofia-libperfmgr
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/perf/powerhint.json:system/etc/powerhint.json
-
-# Soong
-PRODUCT_SOONG_NAMESPACES += \
-    device/motorola/sofia
-
-# Telephony
-PRODUCT_PACKAGES += \
-    telephony-ext \
-    qti-telephony-utils \
-    qti_telephony_utils.xml \
-    qti-telephony-hidl-wrapper \
-    qti_telephony_hidl_wrapper.xml
-
-PRODUCT_BOOT_JARS += \
-    telephony-ext
-
-# WiFi Display
-PRODUCT_PACKAGES += \
-    libnl
-
-PRODUCT_BOOT_JARS += \
-    WfdCommon
-
-# Update engine
-PRODUCT_PACKAGES += \
+    android.hardware.boot@1.0-impl.recovery \
     bootctrl.trinket.recovery \
-    update_engine \
-    update_engine_sideload \
-    update_verifier
+    fastbootd
 
 PRODUCT_PACKAGES_DEBUG += \
     update_engine_client
 
+PRODUCT_PACKAGES += \
+    omni_charger_res_images \
+    animation.txt \
+    font_charger.png
+
+PRODUCT_PACKAGES += \
+    com.android.future.usb.accessory
+
+# Live Wallpapers
+PRODUCT_PACKAGES += \
+    LiveWallpapers \
+    LiveWallpapersPicker \
+    VisualizationWallpapers \
+    librs_jni
+
+# Permissions
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.verified_boot.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/android.software.verified_boot.xml
+
+PRODUCT_AAPT_CONFIG := xxxhdpi
+PRODUCT_AAPT_PREF_CONFIG := xxxhdpi
+PRODUCT_CHARACTERISTICS := nosdcard
+
+# Camera
+PRODUCT_PACKAGES += \
+    SnapdragonCamera2
+
+# ANT+
+#PRODUCT_PACKAGES += \
+#    AntHalService
+
+# QMI
+PRODUCT_PACKAGES += \
+    libjson
+
+PRODUCT_PACKAGES += \
+    ims-ext-common \
+    ims_ext_common.xml \
+    qti-telephony-hidl-wrapper \
+    qti_telephony_hidl_wrapper.xml \
+    qti-telephony-utils \
+    qti_telephony_utils.xml \
+    tcmiface
+
+# Netutils
+PRODUCT_PACKAGES += \
+    netutils-wrapper-1.0 \
+    libandroid_net
+
+PRODUCT_PACKAGES += \
+    MotoActions
+
+PRODUCT_PACKAGES += \
+    vndk_package
+
+PRODUCT_PACKAGES += \
+    android.hidl.base@1.0
+
+PRODUCT_PACKAGES += \
+    vendor.display.config@1.10 \
+    libdisplayconfig \
+    libqdMetaData.system \
+    libqdMetaData
+
+#Nfc
+PRODUCT_PACKAGES += \
+    android.hardware.nfc@1.0 \
+    android.hardware.nfc@1.1 \
+    android.hardware.nfc@1.2
+
+# Display
+PRODUCT_PACKAGES += \
+    libion \
+    libtinyxml2
+
+PRODUCT_PACKAGES += \
+    libtinyalsa
+
+
+# TODO(b/78308559): includes vr_hwc into GSI before vr_hwc move to vendor
+PRODUCT_PACKAGES += \
+    vr_hwc
+
+PRODUCT_COPY_FILES += \
+    frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/media_codecs_google_audio.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/media_codecs_google_telephony.xml \
+    frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/media_codecs_google_video.xml
+
+PRODUCT_PACKAGES += \
+    vendor.qti.hardware.wifi@1.0
+
+# Remove unwanted packages
+PRODUCT_PACKAGES += \
+    RemovePackages
+
+#PRODUCT_BOOT_JARS += \
+#    com.nxp.nfc \
+#    tcmiface \
+#    WfdCommon \
+#    qcnvitems
+
+# Video seccomp policy files
+PRODUCT_COPY_FILES += \
+    device/motorola/sofia/seccomp/codec2.software.ext.policy:$(TARGET_COPY_OUT)/etc/seccomp_policy/codec2.software.ext.policy
+
+# Temporary handling
+#
+# Include config.fs get only if legacy device/qcom/<target>/android_filesystem_config.h
+# does not exist as they are mutually exclusive.  Once all target's android_filesystem_config.h
+# have been removed, TARGET_FS_CONFIG_GEN should be made unconditional.
+DEVICE_CONFIG_DIR := $(dir $(firstword $(subst ]],, $(word 2, $(subst [[, ,$(_node_import_context))))))
+ifeq ($(wildcard device/motorola/sofia/android_filesystem_config.h),)
+  TARGET_FS_CONFIG_GEN := device/motorola/sofia/config.fs
+else
+  $(warning **********)
+  $(warning TODO: Need to replace legacy $(DEVICE_CONFIG_DIR)android_filesystem_config.h with config.fs)
+  $(warning **********)
+endif
+
+ROM_BUILDTYPE := GAPPS
+TARGET_INCLUDE_STOCK_ARCORE := true
+$(call inherit-product-if-exists, vendor/gapps/config.mk)
+
+$(call inherit-product, build/make/target/product/gsi_keys.mk)

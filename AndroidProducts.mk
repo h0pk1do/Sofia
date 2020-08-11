@@ -1,8 +1,8 @@
 PRODUCT_MAKEFILES := \
-	$(LOCAL_DIR)/lineage_sofia.mk \
+	$(LOCAL_DIR)/RR_sofia.mk \
 
 COMMON_LUNCH_CHOICES := \
-	lineage_sofia-user \
-	lineage_sofia-userdebug \
-        lineage_sofia-eng
+	RR_sofia-user \
+	RR_sofia-userdebug \
+        RR_sofia-eng
 
